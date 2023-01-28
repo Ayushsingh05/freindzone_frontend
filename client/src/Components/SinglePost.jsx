@@ -9,69 +9,71 @@ import save from '../img/save.PNG'
 import smile from '../img/smile.PNG'
 import { useEffect } from 'react'
 import { useState } from 'react'
-// comments
-// : 
-// []
-// createdAt
-// : 
-// "2023-01-17T18:00:06.616Z"
-// likes
-// : 
-// []
-// post_body
-// : 
-// "Since you've been around, I smile a lot more than I used to"
-// post_pic_url
-// : 
-// "https://www.rolls-roycemotorcars.com/content/dam/rrmc/marketUK/rollsroycemotorcars_com/1-0-home/page-properties/rrmc-homepage-ghost-share-image.jpg"
-// post_title
-// : 
-// "My Crush"
-// postedBy
-// : 
-// "63c6c3f71c61922a79a0fcff"
-// updatedAt
-// : 
-// "2023-01-17T18:00:06.616Z"
-// __v
-// : 
-// 0
-// _id
-// : 
-// "63c6e2268ceb655fc1b739d9"
-// user_exists
-// : 
-// date
-// : 
-// "2023-01-17T15:51:19.453Z"
-// email
-// : 
-// "Ashish@gmail.com"
-// followers
-// : 
-// []
-// following
-// : 
-// ['63c6f3cf56bfeeeab7704780']
-// name
-// : 
-// "Ashish Bhai"
-// password
-// : 
-// "$2b$10$Qpkdsb9sBHndt3x7GLihm.BF6dPZd3Hhibhwi3qYu6UR./pijBd1."
-// profile_pic
-// : 
-// "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
-// __v
-// : 
-// 0
-// _id
-// : 
-// "63c6c3f71c61922a79a0fcff"
-// link :- http://localhost:8080/profile/search/63c6f3cf56bfeeeab7704780
+
 export const SinglePost = (props) => {
-    const {post_pic_url,post_title,post_body,postedBy,likes}=props;
-    // console.log(props);
+
+const [date,setDate]=useState(0);
+const [time, setTime]=useState("");
+    const {post_pic_url,post_title,post_body,postedBy,likes,createdAt}=props;
+
+    const convertTime=(t)=>{
+      setTime(t);
+    }
+  const countTime=()=>{
+    const _MS_PER_YEAR = 1000 * 60 * 60 * 24 *30* 365;
+    const olddate= new Date(createdAt)
+    const newdate=new Date()
+    const utc1 = Date.UTC(olddate.getFullYear(), olddate.getMonth(), olddate.getDate());
+  const utc2 = Date.UTC(newdate.getFullYear(), newdate.getMonth(), newdate.getDate());
+ 
+  const year= Math.floor((utc2 - utc1) / _MS_PER_YEAR); 
+  if(year === 0){
+     const _MS_PER_MONTH=1000 * 60 * 60 * 24 *30;
+     const month= Math.floor((utc2 - utc1) / _MS_PER_MONTH);
+     if(month === 0){
+      const _MS_PER_DAYS=1000 * 60 * 60 * 24 ;
+      const days= Math.floor((utc2 - utc1) / _MS_PER_DAYS);
+      if(days=== 0){
+        const _MS_PER_HOUR=1000 * 60 * 60  ;
+        const hour= Math.floor((utc2 - utc1) / _MS_PER_HOUR);
+        
+        if(hour===0){
+          const _MS_PER_MINUTES=1000 * 60   ;
+          const min= Math.floor((utc2 - utc1) / _MS_PER_MINUTES);
+          if(min===0){
+            const _MS_PER_SECONDS=1000 * 60   ;
+            const sec= Math.floor((utc2 - utc1) / _MS_PER_SECONDS);
+            setDate(sec);
+            convertTime("seconds");
+            return
+          }
+          else{
+            setDate(min);
+          convertTime("minutes");
+          return
+          }
+        }else{
+          setDate(hour);
+          convertTime("hours");
+          return
+        }
+      }else{
+        setDate(days);
+        convertTime("days");
+  return
+      }
+     }else{
+      setDate(month);
+      convertTime("month");
+  return
+     }
+  }else{
+  setDate(year);
+  convertTime("year");
+  return
+  }
+  }
+   
     const [user,setUser]=useState({});
     const display = async()=>{
         try{
@@ -84,7 +86,7 @@ export const SinglePost = (props) => {
              })
              const data= await res.json();
              setUser(data.user_exists);
-             console.log(data);
+             countTime();
         } catch(e){
           console.log(e.message);
         }
@@ -111,7 +113,7 @@ export const SinglePost = (props) => {
                     </div>
                     <p class="likes">{likes.length} likes</p>
                     <p class="description"><span>{post_title} </span> {post_body}</p>
-                    <p class="post-time">2 minutes ago</p>
+                    <p class="post-time">{date} {time} ago</p>
                 </div>
                 <div class="comment-wrapper">
                     <img src={smile} class="icon" alt=""/>

@@ -2,9 +2,28 @@ import React from 'react'
 import { useState } from 'react'
 
 import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { getUserDetails } from '../Redux/Action'
 import { SinglePost } from './SinglePost'
 export const Posts = () => {
     const [posts,setPosts]= useState([]);
+    const dispatch =useDispatch();
+    const fetchUserDetails= async ()=>{
+      try{
+          const res=await fetch(`http://localhost:8080/user/loggedInUser`,{
+           method: 'GET',
+           headers: {
+             'Content-Type': 'application/json',
+             'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2M2ZjNjZjU2YmZlZWVhYjc3MDQ3ODAiLCJpYXQiOjE2NzQ4NDYxNDYsImV4cCI6MTY3NTI3ODE0Nn0.mmxWDUf0o2EttaUjG7CMtbewmr1gW4u6axCh7XA8Yy4',
+           }
+          })
+          const data= await res.json();
+          dispatch(getUserDetails(data));
+        //  return data;
+     } catch(e){
+       console.log(e.message)
+     }
+  }
     const display = async()=>{
       try{
            const res=await fetch(`http://localhost:8080/post/getcreatepost`,{
@@ -23,6 +42,8 @@ export const Posts = () => {
     }
     useEffect(()=>{
           display();
+          fetchUserDetails();
+          //  dispatch(getUserDetails(fetchUserDetails));
     },[]
         )
   return (
