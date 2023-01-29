@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { getUserDetails } from '../Redux/Action'
+import { getUserDetails } from '../../Redux/Action'
 import { SinglePost } from './SinglePost'
 export const Posts = () => {
     const [posts,setPosts]= useState([]);

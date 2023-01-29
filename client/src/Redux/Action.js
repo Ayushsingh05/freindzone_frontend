@@ -18,3 +18,18 @@ export const getAllUsers= (data)=>{
     }
     
     }
+
+    export const manageLoginPage= (data)=>{
+        return {
+            type: "LOGINPAGE",
+            payload:data
+        }
+        
+        }
+        export const userLoggedIn= (data)=>{
+            return {
+                type: "LOGGEDIN",
+                payload:data
+            }
+            
+            }

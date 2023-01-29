@@ -1,7 +1,7 @@
 import React from 'react'
-import image1 from '../img/cover 1.png'
-import image2 from '../img/cover 2.png'
-import image3 from '../img/cover 3.png'
+import image1 from '../../img/cover 1.png'
+import image2 from '../../img/cover 2.png'
+import image3 from '../../img/cover 3.png'
 export const Status = () => {
   return (
     <section class="main">

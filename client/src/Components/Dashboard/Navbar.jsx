@@ -1,10 +1,10 @@
 import React from 'react'
-import logo from '../img/logo.PNG';
-import home from '../img/home.PNG'
-import messenger from '../img/messenger.PNG'
-import add from '../img/add.PNG'
-import explore from '../img/explore.PNG'
-import like from '../img/like.PNG'
+import logo from '../../img/logo.PNG';
+import home from '../../img/home.PNG'
+import messenger from '../../img/messenger.PNG'
+import add from '../../img/add.PNG'
+import explore from '../../img/explore.PNG'
+import like from '../../img/like.PNG'
 export const Navbar = () => {
   return (
     <nav class="navbar">

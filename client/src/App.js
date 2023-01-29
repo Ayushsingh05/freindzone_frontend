@@ -1,21 +1,11 @@
 
-import './App.css';
-import { Navbar } from './Components/Navbar';
-import { Posts } from './Components/Posts';
-import { Recommondation } from './Components/Recommondation';
-import { Status } from './Components/Status';
-import './Components/Style.css'
+// import './App.css';
+import './Components/Dashboard/Style.css'
+import { AllRoutes } from './AllRoutes/AllRoutes';
 function App() {
   return (
     <div className="App">
-      <Navbar/>
-    
-    <Status/>
-      <Posts/>
-    
-  
-      <Recommondation/>
-      
+     <AllRoutes/>
     </div>
   );
 }

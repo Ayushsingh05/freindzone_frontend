@@ -1,9 +1,9 @@
 import React from 'react'
-import image9 from '../img/cover 9.png'
+import image9 from '../../img/cover 9.png'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { getAllUsers } from '../Redux/Action'
+import { getAllUsers } from '../../Redux/Action'
 import { DashboardSingleUser } from './DashboardSingleUser'
 export const Recommondation = () => {
     const data =useSelector(store=>store);
@@ -18,7 +18,6 @@ export const Recommondation = () => {
              }
             })
             const data= await res.json();
-            console.log(data)
             dispatch(getAllUsers(data.data));
        } catch(e){
          console.log(e.message)

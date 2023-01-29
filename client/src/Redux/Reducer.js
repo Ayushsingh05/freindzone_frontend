@@ -3,7 +3,9 @@
 
 const details={
     userDetails:{},
-    alluser:[]
+    alluser:[],
+    loginpage:false,
+    loggedin:false
 }
 
 export const reducer= (state=details,{type,payload})=>{
@@ -18,7 +20,17 @@ export const reducer= (state=details,{type,payload})=>{
                 ...state,
                 alluser:[...payload]
             }     
-    
+       case "LOGINPAGE":
+       return {
+         ...state,
+         loginpage:payload
+       }
+       case "LOGGEDIN":{
+        return {
+            ...state,
+            loggedin:payload
+        }
+       }
         default:
           return{ ...state}
     }
