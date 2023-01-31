@@ -9,7 +9,9 @@
 	font-size: 15px;
 	line-height: 1.7;
 	color: #c4c3ca;
-	background-color: #e3e3e3;
+	/* background-color: #e3e3e3; */
+  background: center;
+  background-image: url(https://cdn.shopify.com/s/files/1/0070/7032/files/Fearless_Motivational_Quote_Desktop_Wallpaper_1.png?format=jpg&quality=90&v=1600450412);
 	overflow-x: hidden;
    
 }
@@ -114,6 +116,7 @@ h6 span{
   width: 100%;
   height: 100%;
   background-color: #2a2b38;
+  /* background: transparent; */
   background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
   background-position: bottom center;
   background-repeat: no-repeat;

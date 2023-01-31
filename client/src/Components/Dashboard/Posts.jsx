@@ -5,7 +5,10 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { getUserDetails } from '../../Redux/Action'
 import { SinglePost } from './SinglePost'
+import Cookies from 'universal-cookie'
 export const Posts = () => {
+  const cookies = new Cookies();
+  const token= cookies.get('jwt')
     const [posts,setPosts]= useState([]);
     const dispatch =useDispatch();
     const fetchUserDetails= async ()=>{
@@ -14,7 +17,7 @@ export const Posts = () => {
            method: 'GET',
            headers: {
              'Content-Type': 'application/json',
-             'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2M2ZjNjZjU2YmZlZWVhYjc3MDQ3ODAiLCJpYXQiOjE2NzQ4NDYxNDYsImV4cCI6MTY3NTI3ODE0Nn0.mmxWDUf0o2EttaUjG7CMtbewmr1gW4u6axCh7XA8Yy4',
+             'Authorization': 'Bearer ' + token,
            }
           })
           const data= await res.json();
@@ -30,7 +33,7 @@ export const Posts = () => {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2M2ZjNjZjU2YmZlZWVhYjc3MDQ3ODAiLCJpYXQiOjE2NzQ4NDYxNDYsImV4cCI6MTY3NTI3ODE0Nn0.mmxWDUf0o2EttaUjG7CMtbewmr1gW4u6axCh7XA8Yy4',
+              'Authorization': 'Bearer ' + token,
             }
            })
            const data= await res.json();
@@ -43,14 +46,14 @@ export const Posts = () => {
     useEffect(()=>{
           display();
           fetchUserDetails();
-          //  dispatch(getUserDetails(fetchUserDetails));
+          
     },[]
         )
   return (
     <section class="main post-main">
     <div class="wrapper">
         <div class="left-col">
-           { setPosts.length>0 ?posts.map(el=> <SinglePost {...el} />) : <h1>Loading...</h1> }
+           {posts&& setPosts.length>0 ?posts.map(el=> <SinglePost {...el} />) : <h1>Loading...</h1> }
         </div>
     </div>
 </section>

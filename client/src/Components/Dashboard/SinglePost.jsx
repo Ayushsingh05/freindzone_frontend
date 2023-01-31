@@ -1,19 +1,41 @@
 import React from 'react'
-
+import axios from 'axios'
 import option from '../../img/option.PNG'
 import like from '../../img/like.PNG'
 import comment from '../../img/comment.PNG'
 import send from '../../img/send.PNG'
 import save from '../../img/save.PNG'
 import smile from '../../img/smile.PNG'
+import heartFill from '../../img/heartFill.png'
 import { useEffect } from 'react'
-import { useState } from 'react'
-
+import { useState,useMemo } from 'react'
+import Cookies from 'universal-cookie'
+import { useSelector } from 'react-redux'
+import { Comments } from './Comments'
 export const SinglePost = (props) => {
 
+//   comments
+// : 
+// Array(2)
+// 0
+// : 
+// {text: 'Kya Baat hi', postedBy: '63c6c3f71c61922a79a0fcff', _id: '63c6ee24b0268073d004e01c'}
+// 1
+// : 
+// {text: 'Kya Baat hi', postedBy: '63c6c3f71c61922a79a0fcff', _id: '63c6f69f56bfeeeab77047cf'}
+
+  const {_id,post_pic_url,post_title,post_body,postedBy,likes,createdAt,comments}=props;
+  const userDetails= useSelector(store=>store.userDetails);
+  const cookies = new Cookies();
+  const [likeNum,setLikeNum]=useState(likes.length)
+  const token= cookies.get('jwt');
+  const [show,setShow]=useState(false);
+  const [comment,setComment]= useState("");
+  const [showComm,setShowComm]=useState(comments);
 const [date,setDate]=useState(0);
 const [time, setTime]=useState("");
-    const {post_pic_url,post_title,post_body,postedBy,likes,createdAt}=props;
+const [liked,setLiked]=useState(false);
+    
 
     const convertTime=(t)=>{
       setTime(t);
@@ -72,7 +94,14 @@ const [time, setTime]=useState("");
   return
   }
   }
-   
+   const AddLike=()=>{
+    let likes=likeNum;
+    setLikeNum(likes+1);
+   }
+   const SubLike=()=>{
+    let likes=likeNum;
+    setLikeNum(likes-1);
+   }
     const [user,setUser]=useState({});
     const display = async()=>{
         try{
@@ -80,7 +109,7 @@ const [time, setTime]=useState("");
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2M2ZjNjZjU2YmZlZWVhYjc3MDQ3ODAiLCJpYXQiOjE2NzQ4NDYxNDYsImV4cCI6MTY3NTI3ODE0Nn0.mmxWDUf0o2EttaUjG7CMtbewmr1gW4u6axCh7XA8Yy4',
+                'Authorization': 'Bearer ' + token,
               }
              })
              const data= await res.json();
@@ -90,8 +119,62 @@ const [time, setTime]=useState("");
           console.log(e.message);
         }
       }
+      const likePost=async()=>{
+        try{
+          const res=await fetch(`http://localhost:8080/post/likes`,{
+           method: 'PUT',
+           body:JSON.stringify({postId:_id}),
+           headers: {
+             'Content-Type': 'application/json',
+             'Authorization': 'Bearer ' + token,
+           }
+          })
+          const data= await res.json();
+          AddLike();
+          setLiked(true);
+     } catch(e){
+       console.log(e.message);
+     }
+  
+      }
+      const dislikePost=async()=>{
+        axios.put(`http://localhost:8080/post/dislikes`,
+        {postId:_id},
+       { headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        }}
+       ).then(response => {
+         SubLike();
+         setLiked(false);
+         
+       })
+       .catch(error => {
+         console.error(error);
+       });
+      }
+     const handlePostComment =async ()=>{
+      try{
+        const res=await fetch(`http://localhost:8080/post/comments`,{
+         method: 'PUT',
+         body:JSON.stringify({postId:_id,text :comment}),
+         headers: {
+           'Content-Type': 'application/json',
+           'Authorization': 'Bearer ' + token,
+         }
+        })
+        const data= await res.json();
+        setShowComm([...showComm,{postId:_id,text :comment}])
+   } catch(e){
+     console.log(e.message);
+   }
+     }
     useEffect(()=>{
         display();
+       const isLiked= likes.find(el=> el==userDetails.user._id);
+       if(isLiked){
+        setLiked(true);
+       }
     },[])
   return (
     <div class="post">
@@ -105,19 +188,25 @@ const [time, setTime]=useState("");
                 <img src={post_pic_url} class="post-image" alt=""/>
                 <div class="post-content">
                     <div class="reaction-wrapper">
-                        <img src={like} class="icon" alt=""/>
+                      {
+                    liked ? <img src={heartFill} class="icon" alt="" onClick={dislikePost} />
+                    : <img src={like} class="icon" alt="" onClick={likePost}/>
+                    }
+                       
                         <img src={comment} class="icon" alt=""/>
                         <img src={send} class="icon" alt=""/>
                         <img src={save} class="save icon" alt=""/>
                     </div>
-                    <p class="likes">{likes.length} likes</p>
+                    <p class="likes">{likeNum} likes</p>
                     <p class="description"><span>{post_title} </span> {post_body}</p>
+                    <p class="post-time" onClick={()=>setShow(!show)}>{showComm.length>0? `${show ?'hide':'view'} all ${showComm.length} Comments`:"No Comments"}</p>
+                   {show ? showComm.length>0? <Comments props={showComm} /> : null : null}
                     <p class="post-time">{date} {time} ago</p>
                 </div>
                 <div class="comment-wrapper">
                     <img src={smile} class="icon" alt=""/>
-                    <input type="text" class="comment-box" placeholder="Add a comment"/>
-                    <button class="comment-btn">post</button>
+                    <input type="text" class="comment-box" placeholder="Add a comment" onChange={(e)=>setComment(e.target.value)}/>
+                    <button class="comment-btn" onClick={handlePostComment}>post</button>
                 </div>
             </div>
   )

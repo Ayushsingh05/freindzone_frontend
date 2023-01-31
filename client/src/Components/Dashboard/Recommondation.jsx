@@ -3,9 +3,12 @@ import image9 from '../../img/cover 9.png'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { getAllUsers } from '../../Redux/Action'
+import { getAllUsers, userLoggedIn } from '../../Redux/Action'
 import { DashboardSingleUser } from './DashboardSingleUser'
+import Cookies from 'universal-cookie'
 export const Recommondation = () => {
+  const cookies = new Cookies();
+ const token= cookies.get('jwt')
     const data =useSelector(store=>store);
     const dispatch=useDispatch();
     const fetchAllUser= async ()=>{
@@ -14,7 +17,7 @@ export const Recommondation = () => {
              method: 'GET',
              headers: {
                'Content-Type': 'application/json',
-               'Authorization': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2M2M2ZjNjZjU2YmZlZWVhYjc3MDQ3ODAiLCJpYXQiOjE2NzQ4NDYxNDYsImV4cCI6MTY3NTI3ODE0Nn0.mmxWDUf0o2EttaUjG7CMtbewmr1gW4u6axCh7XA8Yy4',
+               'Authorization': 'Bearer ' + token,
              }
             })
             const data= await res.json();
@@ -22,6 +25,10 @@ export const Recommondation = () => {
        } catch(e){
          console.log(e.message)
        }
+    }
+    const logout=()=>{
+      dispatch(userLoggedIn(false));
+      cookies.remove('jwt')
     }
     useEffect(()=>{
         fetchAllUser();
@@ -40,7 +47,7 @@ export const Recommondation = () => {
                 <p class="username">{data.userDetails.user.name}</p>
                 <p class="sub-text">{data.userDetails.user.email}</p>
             </div>
-            <button class="action-btn">switch</button>
+            <button class="action-btn" onClick={logout}>switch</button>
         </div>:
         <p>Loading....</p>
            }
