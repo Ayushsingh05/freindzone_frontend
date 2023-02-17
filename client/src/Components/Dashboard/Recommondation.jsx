@@ -54,7 +54,7 @@ export const Recommondation = () => {
             <p class="suggestion-text">Suggestions for you</p>
             {
                 data.alluser?
-                data.alluser.map(el=><DashboardSingleUser {...el} />):
+                data.alluser.slice(0,4).map(el=><DashboardSingleUser {...el} />):
                 <h5>No Suggestion for You</h5>
             }
            

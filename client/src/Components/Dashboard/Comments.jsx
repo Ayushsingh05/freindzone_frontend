@@ -2,7 +2,6 @@ import React from 'react'
 import { SingleComments } from './SingleComments'
 
 export const Comments = ({props}) => {
- 
   return (
     <div>
         {

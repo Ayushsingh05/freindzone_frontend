@@ -14,16 +14,6 @@ import { useSelector } from 'react-redux'
 import { Comments } from './Comments'
 export const SinglePost = (props) => {
 
-//   comments
-// : 
-// Array(2)
-// 0
-// : 
-// {text: 'Kya Baat hi', postedBy: '63c6c3f71c61922a79a0fcff', _id: '63c6ee24b0268073d004e01c'}
-// 1
-// : 
-// {text: 'Kya Baat hi', postedBy: '63c6c3f71c61922a79a0fcff', _id: '63c6f69f56bfeeeab77047cf'}
-
   const {_id,post_pic_url,post_title,post_body,postedBy,likes,createdAt,comments}=props;
   const userDetails= useSelector(store=>store.userDetails);
   const cookies = new Cookies();
@@ -102,23 +92,7 @@ const [liked,setLiked]=useState(false);
     let likes=likeNum;
     setLikeNum(likes-1);
    }
-    const [user,setUser]=useState({});
-    const display = async()=>{
-        try{
-             const res=await fetch(`http://localhost:8080/profile/search/${postedBy}`,{
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token,
-              }
-             })
-             const data= await res.json();
-             setUser(data.user_exists);
-             countTime();
-        } catch(e){
-          console.log(e.message);
-        }
-      }
+   
       const likePost=async()=>{
         try{
           const res=await fetch(`http://localhost:8080/post/likes`,{
@@ -170,18 +144,19 @@ const [liked,setLiked]=useState(false);
    }
      }
     useEffect(()=>{
-        display();
+       
        const isLiked= likes.find(el=> el==userDetails.user._id);
        if(isLiked){
         setLiked(true);
        }
+       countTime();
     },[])
   return (
     <div class="post">
                 <div class="info">
                     <div class="user">
-                        <div class="profile-pic"><img src={user? user.profile_pic : 'null'} alt=""/></div>
-                        <p class="username">{user ? user.name : 'loading...'}</p>
+                        <div class="profile-pic"><img src={postedBy? postedBy.profile_pic : 'null'} alt=""/></div>
+                        <p class="username">{postedBy ? postedBy.name : 'loading...'}</p>
                     </div>
                     <img src={option} class="options" alt=""/>
                 </div>

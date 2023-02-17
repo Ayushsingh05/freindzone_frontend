@@ -82,7 +82,7 @@ export const SignIn = () => {
                }
                else{
                 cookies.set('jwt' , data.token , {
-                    maxAge:24 * 60 * 60 * 100,
+                    maxAge:24 * 60 * 60,
                     path: '/'
                   });
                  setTimeout(()=>{
