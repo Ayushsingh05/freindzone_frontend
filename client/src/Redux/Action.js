@@ -33,3 +33,10 @@ export const getAllUsers= (data)=>{
             }
             
             }
+
+    export const postImages = (data)=>{
+        return {
+            type:"POSTIMAGE",
+            payload:data
+        }
+    }

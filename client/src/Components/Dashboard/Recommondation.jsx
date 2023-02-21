@@ -10,6 +10,18 @@ export const Recommondation = () => {
   const cookies = new Cookies();
  const token= cookies.get('jwt')
     const data =useSelector(store=>store);
+    const filtersuggestionArray= data.alluser.filter((el)=>{
+      let check=false;
+      for(let i of data.userDetails.user.followers){
+        if(el._id === i){
+          check=true;
+        }
+      }
+      if(!check){
+        return el;
+      }
+    })
+    console.log(data.userDetails);
     const dispatch=useDispatch();
     const fetchAllUser= async ()=>{
         try{
@@ -53,8 +65,8 @@ export const Recommondation = () => {
            }
             <p class="suggestion-text">Suggestions for you</p>
             {
-                data.alluser?
-                data.alluser.slice(0,4).map(el=><DashboardSingleUser {...el} />):
+               filtersuggestionArray?
+               filtersuggestionArray.slice(0,4).map(el=><DashboardSingleUser {...el} />):
                 <h5>No Suggestion for You</h5>
             }
            

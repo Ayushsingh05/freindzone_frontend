@@ -5,7 +5,8 @@ const details={
     userDetails:{},
     alluser:[],
     loginpage:false,
-    loggedin:false
+    loggedin:false,
+    postImages:[],
 }
 
 export const reducer= (state=details,{type,payload})=>{
@@ -29,6 +30,12 @@ export const reducer= (state=details,{type,payload})=>{
         return {
             ...state,
             loggedin:payload
+        }
+       }
+       case "POSTIMAGE":{
+        return {
+            ...state,
+            postImages:[...payload]
         }
        }
         default:

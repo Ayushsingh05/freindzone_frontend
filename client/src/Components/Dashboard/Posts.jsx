@@ -2,14 +2,14 @@ import React from 'react'
 import { useState } from 'react'
 
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { getUserDetails } from '../../Redux/Action'
+import { useDispatch ,useSelector} from 'react-redux'
+import { getUserDetails, postImages } from '../../Redux/Action'
 import { SinglePost } from './SinglePost'
 import Cookies from 'universal-cookie'
 export const Posts = () => {
   const cookies = new Cookies();
+    const store= useSelector(store=>store.postImages)
   const token= cookies.get('jwt')
-    const [posts,setPosts]= useState([]);
     const dispatch =useDispatch();
     const fetchUserDetails= async ()=>{
       try{
@@ -37,7 +37,7 @@ export const Posts = () => {
             }
            })
            const data= await res.json();
-           setPosts(data.data);
+           dispatch(postImages(data.data))
            console.log(data);
       } catch(e){
         console.log(e.message);
@@ -53,7 +53,7 @@ export const Posts = () => {
     <section class="main post-main">
     <div class="wrapper">
         <div class="left-col">
-           {posts&& setPosts.length>0 ?posts.map(el=> <SinglePost {...el} />) : <h1>Loading...</h1> }
+           {store&&store.length>0 ?store.map(el=> <SinglePost {...el} />) : <h1>Loading...</h1> }
         </div>
     </div>
 </section>
